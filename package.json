@@ -1,0 +1,23 @@
+{
+  "name": "yardmaster",
+  "version": "0.1.0",
+  "private": true,
+  "description": "One command to clone, configure and run a fleet of microservice repos locally, driven by a single services.yaml",
+  "type": "module",
+  "bin": {
+    "ym": "./cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2vergent/yardmaster.git"
+  },
+  "license": "MIT",
+  "author": "Vineeth Kumar",
+  "dependencies": {
+    "@inquirer/prompts": "^7.0.0",
+    "yaml": "^2.5.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
