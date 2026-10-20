@@ -1,0 +1,69 @@
+# =============================================================================
+# yardmaster workspace — the single source of truth for your local fleet.
+# Everything else (Tilt resources, nginx routes, per-service .env files, the
+# VS Code workspace) is derived from this file. Run `ym regen` after editing.
+# =============================================================================
+
+version: 1
+
+# Defaults applied to every service unless overridden.
+defaults:
+  kind: backend              # backend | frontend
+  serve_cmd: "npm start"
+  health_path: /             # GET path used for readiness probes
+  env_format: dotenv         # dotenv (KEY=value) | yaml-colon (KEY: "value")
+
+# -----------------------------------------------------------------------------
+# Environments — each one maps to a git branch and an env-var overlay.
+#   branch       branch every repo is cloned on / switched to (default: name)
+#   prefix       .env.example key prefix for this env (default: NAME_)
+#   extends      apply another environment's overrides first
+#   description  shown in the setup picker
+# -----------------------------------------------------------------------------
+environments:
+  main:
+    branch: main
+    description: "default branch of every repo"
+
+default_environment: main
+
+# -----------------------------------------------------------------------------
+# Stacks — named selections of services, picked at `ym setup` and switched
+# with `ym stack apply <name>`. "*" means every service.
+# -----------------------------------------------------------------------------
+stacks:
+  everything:
+    label: "Everything"
+    description: "Every service in this file"
+    services: ["*"]
+
+default_stack: everything
+
+# Local ports for the nginx gateway and Tilt's dashboard/API.
+gateway_port: 8080
+tilt_port: 10350
+
+# -----------------------------------------------------------------------------
+# Services
+#   name          local folder name AND service identifier
+#   repo          git clone URL
+#   port          local listen port (exported to the process as PORT)
+#   env_prefix    other services reach this one via SVC_<env_prefix>_URL
+#   routes        nginx path prefixes on the gateway that proxy here
+#   serve_cmd     command Tilt runs in the repo folder
+#   display_name  short name shown in the Tilt dashboard
+#   depends_on    services that must be ready before this one starts
+#   watch         paths Tilt watches for restarts (default: whole repo)
+#   env           extra env vars for the process
+#   env_template  per-service .env template (default: .env.example)
+#   source        reuse another service's repo (sidecars / workers)
+#   node_version  Node major to install deps with (via fnm)
+#   npm_registry  custom registry for npm install
+#   opt_in        true = skipped by "*"; add explicitly with `ym add`
+# -----------------------------------------------------------------------------
+services:
+  - name: api
+    repo: https://github.com/your-org/api.git
+    port: 4000
+    env_prefix: API
+    routes: [/api]
