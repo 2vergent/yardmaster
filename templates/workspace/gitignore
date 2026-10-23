@@ -1,0 +1,6 @@
+# Service repos are cloned into this folder; track only the workspace config.
+/*
+!/services.yaml
+!/.env.example
+!/.gitignore
+!/README.md
